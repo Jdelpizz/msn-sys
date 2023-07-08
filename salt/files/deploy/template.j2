@@ -1,0 +1,85 @@
+
+{#-Set Test Var-#}
+{%- set grain = "mx_data"-%}
+
+{#- Set Variables #}
+{%- set msn_api_addr = "msn_api"-%}
+{%- set mx_api_addr = "mx_api"-%}
+{%- set api_port = "8888"-%}
+{%- set msn_sys_name = "grain.name" -%}
+{%- set data_port = "8008" -%}
+{%- set cpe_addr = "cpe" -%}
+{%- set cpe_port = "8080" -%}
+{%- set cmd = "server.py grain.ipv4 8888"-%}
+
+{#- Set Macros #}
+{%- macro msn_api_cmd(msn_api_addr, api_port) -%}
+server.py {{msn_api_addr}} {{api_port}}
+{%- endmacro-%}
+
+{%- macro mx_api_cmd(mx_api_addr, api_port) -%}
+server.py {{mx_api_addr}} {{api_port}}
+{%- endmacro -%}
+
+{%- macro msn_data_cmd(data_port, msn_sys_name, msn_api_addr, api_port) -%}
+server.py {{data_port}} {{msn_sys_name}} {{msn_api_addr}} {{api_port}}
+{%- endmacro -%}
+
+{%- macro mx_data_cmd(data_port, msn_sys_name, msn_api_addr, api_port, cpe_addr, cpe_port) -%}
+server.py {{data_port}} {{msn_sys_name}} {{msn_api_addr}} {{api_port}} {{cpe_addr}} {{cpe_port}}
+{%- endmacro -%}
+
+{#- Set Command String #}
+{%- if "msn_api" in grain -%}
+  {%- set cmd = msn_api_cmd(msn_api_addr, api_port) -%}
+{%- elif "mx_api" in grain -%}
+  {%- set cmd = mx_api_cmd(mx_api_addr, api_port) %}
+{%- elif "msn_data" in grain -%}
+  {%- set cmd = msn_data_cmd(data_port, msn_sys_name, msn_api_addr, api_port) -%}
+{%- elif "mx_data" in grain -%}
+  {%- set cmd = mx_data_cmd(data_port, msn_sys_name, msn_api_addr, api_port, cpe_addr, cpe_port) -%}
+{%- endif -%}
+
+{#- Create xml Macros #}
+<?xml version="1.0" encoding="UTF-16"?>
+<Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo>
+    <URI>\Mission System\server</URI>
+  </RegistrationInfo>
+  <Triggers>
+    <BootTrigger>
+      <StartBoundary>2023-07-08T12:15:00</StartBoundary>
+      <Enabled>true</Enabled>
+    </BootTrigger>
+  </Triggers>
+  <Settings>
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
+    <AllowHardTerminate>false</AllowHardTerminate>
+    <StartWhenAvailable>false</StartWhenAvailable>
+    <RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>
+    <IdleSettings>
+      <StopOnIdleEnd>false</StopOnIdleEnd>
+      <RestartOnIdle>false</RestartOnIdle>
+    </IdleSettings>
+    <AllowStartOnDemand>true</AllowStartOnDemand>
+    <Enabled>true</Enabled>
+    <Hidden>false</Hidden>
+    <RunOnlyIfIdle>false</RunOnlyIfIdle>
+    <WakeToRun>true</WakeToRun>
+    <ExecutionTimeLimit>PT0S</ExecutionTimeLimit>
+    <Priority>7</Priority>
+    <RestartOnFailure>
+      <Interval>PT1M</Interval>
+      <Count>3</Count>
+    </RestartOnFailure>
+  </Settings>
+  <Actions Context="Author">
+    <Exec>
+      <Command>python</Command>
+      <Arguments>{{cmd}}</Arguments>
+      <WorkingDirectory>c:\msn-sys</WorkingDirectory>
+    </Exec>
+  </Actions>
+</Task>
