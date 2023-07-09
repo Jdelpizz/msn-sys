@@ -1,4 +1,4 @@
-
+<?xml version="1.0" encoding="UTF-16"?>
 {#-Set Test Var-#}
 {%- set grain = "mx_data"-%}
 
@@ -40,8 +40,8 @@ server.py {{data_port}} {{msn_sys_name}} {{msn_api_addr}} {{api_port}} {{cpe_add
   {%- set cmd = mx_data_cmd(data_port, msn_sys_name, msn_api_addr, api_port, cpe_addr, cpe_port) -%}
 {%- endif -%}
 
-{#- Create xml Macros #}
-<?xml version="1.0" encoding="UTF-16"?>
+{#- Create xml Macros -#}
+
 <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
   <RegistrationInfo>
     <URI>\Mission System\server</URI>
@@ -77,9 +77,9 @@ server.py {{data_port}} {{msn_sys_name}} {{msn_api_addr}} {{api_port}} {{cpe_add
   </Settings>
   <Actions Context="Author">
     <Exec>
-      <Command>python</Command>
+      <Command>"C:\Program Files\Salt Project\Salt\bin\python.exe"</Command>
       <Arguments>{{cmd}}</Arguments>
-      <WorkingDirectory>c:\msn-sys</WorkingDirectory>
+      <WorkingDirectory>C:\Mission System</WorkingDirectory>
     </Exec>
   </Actions>
 </Task>
