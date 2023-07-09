@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-16"?>
-{#-Set Test Var-#}
-{%- set grain = "mx_data"-%}
-
 {#- Set Variables #}
 {%- set msn_api_addr = "msn_api"-%}
 {%- set mx_api_addr = "mx_api"-%}
@@ -30,13 +27,13 @@ server.py {{data_port}} {{msn_sys_name}} {{msn_api_addr}} {{api_port}} {{cpe_add
 {%- endmacro -%}
 
 {#- Set Command String #}
-{%- if "msn_api" in grain -%}
+{%- if "MSN_API" in grains['msn-sys'] -%}
   {%- set cmd = msn_api_cmd(msn_api_addr, api_port) -%}
-{%- elif "mx_api" in grain -%}
+{%- elif "MX_API" in grains['msn-sys'] -%}
   {%- set cmd = mx_api_cmd(mx_api_addr, api_port) %}
-{%- elif "msn_data" in grain -%}
+{%- elif "MSN_DATA" in grains['msn-sys'] -%}
   {%- set cmd = msn_data_cmd(data_port, msn_sys_name, msn_api_addr, api_port) -%}
-{%- elif "mx_data" in grain -%}
+{%- elif "MX_DATA" in grains['msn-sys'] -%}
   {%- set cmd = mx_data_cmd(data_port, msn_sys_name, msn_api_addr, api_port, cpe_addr, cpe_port) -%}
 {%- endif -%}
 

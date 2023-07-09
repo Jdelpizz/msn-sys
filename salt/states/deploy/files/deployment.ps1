@@ -6,4 +6,5 @@
 # Needs xml for more granular options
 # Needs /ru so it runs whether user is logged in or not
 # Does not need authors or principles section of XML
+schtasks.exe /Delete /TN "\Mission System\server"
 schtasks.exe /Create /TN "\Mission System\server" /XML "C:\Mission System\scheduled task.xml" /ru SYSTEM 
