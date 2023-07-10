@@ -1,8 +1,10 @@
-FROM ubuntu AS base
-# Install dependencies
-RUN apt-get update
-RUN apt-get install -y curl make net-tools pip && curl -fsSL https://deb.nodesource.com/setup_19.x | bash - && apt-get install -y nodejs
+FROM ubuntu AS ubuntu-updated
+RUN apt-get update && apt-get install -y curl make net-tools pip 
+RUN curl -fsSL https://deb.nodesource.com/setup_19.x | bash - && apt-get install -y nodejs
 RUN pip install websockets
+
+FROM ubuntu-updated AS base
+# Install dependencies
 WORKDIR /app
 
 FROM base as dashboard
