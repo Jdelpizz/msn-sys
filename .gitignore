@@ -1,2 +1,7 @@
 data-server/log
 msn-server/msn-data.json
+salt/config/_pki/master/master.pem
+salt/config/_pki/master/master.pub
+salt/config/_pki/master/minions/**
+.vscode/settings.json
+salt/states/deploy/files/src/**
