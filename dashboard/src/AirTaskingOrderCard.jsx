@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react'
 
 const {VITE_SHOPS} = import.meta.env
-const SHOPS = VITE_SHOPS.split(' ')
+const SHOPS = VITE_SHOPS.toLowerCase().split(' ')
 
 function MetaSection({label, value}){
   const metaFontSize = "1.2em"
@@ -32,11 +32,11 @@ MetaSection.propTypes = {
 }
 
 function MissionMeta({intel}){
-  const { 
-    msn_takeoff: msnTakeoff, 
-    msn_return: msnReturn, 
-    msn_platform: msnPlatform, 
-    msn_target: msnTarget 
+  const {
+    msn_takeoff: msnTakeoff,
+    msn_return: msnReturn,
+    msn_platform: msnPlatform,
+    msn_target: msnTarget
   } = intel
   return (
     <Stack>
@@ -122,15 +122,19 @@ export default function AirTaskingOrderCard({msnData}){
   // There must be a better pattern for this
   const {intel = {}} = msnData
   var {msn_id: msnId = "unk"} = intel
-  if(msnData.hasOwnProperty('INTEL')){
-    msnId = msnData.INTEL.msn_id
+  console.log(msnData)
+  if(msnData.hasOwnProperty('intel')){
+    msnId = msnData.intel.msn_id
+  }
+  else{
+    msnData = {"intel":{}}
   }
   return (
     <Card px={4} py={2}>
       <Stack spacing={6}>
-        <Heading size="lg">{`Mission ${msnId.toUpperCase()}`}</Heading>
+        <Heading size="lg">{`Mission ${msnId ? msnId.toUpperCase(): ""}`}</Heading>
         <MissionStatus states={msnData} />
-        <MissionMeta intel={msnData.INTEL}/>
+        <MissionMeta intel={msnData.intel}/>
       </Stack>
     </Card>
   )

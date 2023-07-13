@@ -11,7 +11,7 @@ services:
       - .\salt\states:/srv/salt
     environment:
       - SALT_SHARED_SECRET=IAMINCONTROL
-  
+
   dashboard:
     image: tv-dashboard
     build:

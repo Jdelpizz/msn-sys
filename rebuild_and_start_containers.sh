@@ -15,5 +15,3 @@ docker compose up -d \
 	msn-data-4 \
 	msn-data-5 \
 	msn-data-6
-
-
