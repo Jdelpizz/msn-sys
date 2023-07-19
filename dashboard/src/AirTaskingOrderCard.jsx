@@ -72,8 +72,11 @@ MissionMeta.propTypes = {
 }
 
 function Status({label, state, delay}){
+  if ( state != "good" || state != "bad" )
+     { state = "unk"}
   const statusColor = {
     "good": "green.500",
+    "bad" : "red.500",
     "unk": "gray.500"
   }
 
