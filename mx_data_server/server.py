@@ -33,15 +33,17 @@ class Server(BaseHTTPRequestHandler):
         self.end_headers()
 
     # Send data to CPE
-    def send_msg(data):
-        s_data=str(data)
-        msg=json.dumps({"id":"msg", "data":s_data})
-        log.info(f"===========  ws://{CPE_SERVER}:{CPE_PORT}  ====================")
-        with connect(f"ws://{CPE_SERVER}:{CPE_PORT}") as websocket:
+    def send_data(self, data, s, p):
+        log.info(f"===========  ws://{s}:{p}  ====================")
+        with connect(f"ws://{s}:{p}") as websocket:
             websocket.send(data)
             log.info(f"Sending: {data}")
             msg = websocket.recv()
             log.info(f"Received: {msg}")
+
+    def send_msg(self, data, s, p):
+        msg=json.dumps({"id":"msg", "data":data})
+        self.send_data(msg, s, p)
 
     def do_HEAD(self):
         self._set_headers()
@@ -77,7 +79,7 @@ class Server(BaseHTTPRequestHandler):
                 for retry in range(1, max_retries + 1):
                     try:
                         log.info(f"Sending JSON, attempt {retry}")
-                        self.send_msg(json_text)
+                        self.send_msg(str(json_text), CPE_SERVER, CPE_PORT)
                         log.info("JSON sent successfully.")
                         break  # Exit the loop if the message is sent successfully
                     except Exception as e:
