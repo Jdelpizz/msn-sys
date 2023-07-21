@@ -72,8 +72,6 @@ MissionMeta.propTypes = {
 }
 
 function Status({label, state, delay}){
-  if ( state != "good" || state != "bad" )
-     { state = "unk"}
   const statusColor = {
     "good": "green.500",
     "bad" : "red.500",
@@ -82,7 +80,7 @@ function Status({label, state, delay}){
 
   return (
     <HStack>
-      <Circle size={6} bg={statusColor[state]} transition={`all 0.5s ${delay}s`} />
+      <Circle size={6} bg={statusColor[state] || statusColor["bad"]} transition={`all 0.5s ${delay}s`} />
       <Text fontSize="1.8em" fontWeight="bold">{label.toUpperCase()}</Text>
     </HStack>
   )
