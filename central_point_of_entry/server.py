@@ -2,6 +2,7 @@
 import json
 import asyncio
 import logging
+import traceback
 from sys import stdout
 from websockets.server import serve
 
@@ -31,22 +32,40 @@ class WebSocketServer:
 
     async def receive(self, websocket):
         client_str = f'{websocket.remote_address[0]}:{websocket.remote_address[1]}'
-        async for message in websocket:
-            msg = json.loads(message)
-            if msg["id"] == "msg":
-                data = msg["data"]
-                log.info(f"received: {data} - {client_str}")
-                log.info("sending: ok")
-                await websocket.send("ok")
-            else:
-                await self.receive_file(websocket, msg, client_str)
+        try:
+            async for message in websocket:
+                msg = json.loads(message)
+                if msg["id"] == 'fail':
+                    raise Exception("Force Failure")
+                if msg["id"] == "msg":
+                    data = msg["data"]
+                    log.info(f"received: {data} - {client_str}")
+                    log.info("sending: ok")
+                    await websocket.send("ok")
+                else:
+                    await self.receive_file(websocket, msg, client_str)
+        except Exception as e:
+            log.error("An error occurred in the receive process:")
+            log.error(traceback.format_exc())
 
     async def main(self):
-        log.info("Starting Server")
-        async with serve(self.receive, "0.0.0.0", 8080):
-            await asyncio.Future()  # run forever
+        try:
+            log.info("Starting Server")
+            async with serve(self.receive, "0.0.0.0", 8080):
+                await asyncio.Future()  # run forever
+        except Exception as e:
+            log.error("An error occurred in the WebSocket server:")
+            log.error(traceback.format_exc())
 
 if __name__ == "__main__":
     server = WebSocketServer()
     log.info("Starting CPE Server")
-    asyncio.run(server.main())
+    try:
+        asyncio.run(server.main())
+    except KeyboardInterrupt:
+        log.info("Server stopped by the user.")
+    except Exception as e:
+        log.error("An error occurred in the main process:")
+        log.error(traceback.format_exc())
+    finally:
+        log.info("Server closed.")
