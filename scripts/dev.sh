@@ -31,6 +31,7 @@ function start_msn_containers() {
         msn-data-5 \
         msn-data-6
     cd ./scripts
+    sleep 5
 }
 
 # Function to start the MX containers using Docker Compose
@@ -48,11 +49,13 @@ function start_mx_containers() {
         mx-data-3 \
         mx-data-4
     cd ./scripts
+    sleep 5
 }
 
 # Help message function
 function usage() {
     echo "Usage: $0 [-s msn/mx] [-d] [-p check/ctrl/dash]" >&2
+    echo "-f:   Follows container logs"
     echo "-s:   Which Mission System <msn|mx>"
     echo "-d:   Deploy Containers"
     echo "-p:   Which websocket to open (none if omitted) <check|ctrl|dash>"
@@ -60,7 +63,7 @@ function usage() {
 }
 
 # Parse the command-line options using getopts
-while getopts ":s:dcp:" opt; do
+while getopts ":s:dcfp:" opt; do
     case $opt in
         s)
             sys="$OPTARG"
@@ -74,6 +77,12 @@ while getopts ":s:dcp:" opt; do
         c)
             cd ..
             sudo docker compose logs cpe -f
+            cd ./scripts
+            exit 0
+            ;;
+        f)
+            cd ..
+            sudo docker compose logs -f
             cd ./scripts
             exit 0
             ;;
