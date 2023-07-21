@@ -93,8 +93,6 @@ class Server(BaseHTTPRequestHandler):
 
 
 
-
-
     # POST writes data to log and returns the data written
     def do_POST(self):
         with open('log', 'a') as log:
