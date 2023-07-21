@@ -15,6 +15,31 @@ function stop_containers() {
     exit 0
 }
 
+# Function to start the all containers using Docker Compose
+function start_containers() {
+    cd ..
+    sudo docker compose down
+    sudo docker compose build
+    trap 'stop_containers' SIGINT
+    sudo docker compose up -d \
+        dashboard \
+        msn-api \
+        msn-data-1 \
+        msn-data-2 \
+        msn-data-3 \
+        msn-data-4 \
+        msn-data-5 \
+        msn-data-6 \
+        cpe \
+        mx-api \
+        mx-data-1 \
+        mx-data-2 \
+        mx-data-3 \
+        mx-data-4
+    cd ./scripts
+    sleep 5
+}
+
 # Function to start the MSN containers using Docker Compose
 function start_msn_containers() {
     cd ..
@@ -54,7 +79,7 @@ function start_mx_containers() {
 
 # Help message function
 function usage() {
-    echo "Usage: $0 [-s msn/mx] [-d] [-p check/ctrl/dash]" >&2
+    echo "Usage: $0 [-s msn/mx/all] [-d] [-p check/ctrl/dash]" >&2
     echo "-f:   Follows container logs"
     echo "-s:   Which Mission System <msn|mx>"
     echo "-d:   Deploy Containers"
@@ -112,6 +137,9 @@ case $sys in
         mx)
             port=8888
             ;;
+        all)
+            port=8888
+            ;;
         *)
             echo "Invalid system argument." >&2
             usage
@@ -124,6 +152,9 @@ if [ "$deploy_containers" = true ]; then
         start_msn_containers
     elif [ "$sys" = "mx" ]; then
         start_mx_containers
+    elif [ "$sys" = "all" ]; then
+        start_containers
+        sys=mx
     fi
 fi
 
@@ -132,8 +163,6 @@ if [ "$websocket_path" != "check" ] && [ "$websocket_path" != "ctrl" ] && [ "$we
     echo "invalid path selected"
     usage
 fi
-
-
 
 # Validate and construct the websocket URI
 base_path="ws://${sys}-api:${port}"
