@@ -65,7 +65,7 @@ class Server(BaseHTTPRequestHandler):
                 if SHOP.lower() == "intel":
                     data[SHOP] = shopData
                 else:
-                    data[SHOP] = {key:shopData[key] for key in shopData if key == 'status'}
+                    data[SHOP] = {key:shopData[key].tolower() for key in shopData if key == 'status'}
 
                 self._set_headers()
                 self.wfile.write(json.dumps(data).encode('utf-8'))
