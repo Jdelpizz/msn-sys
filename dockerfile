@@ -1,5 +1,5 @@
 FROM ubuntu AS ubuntu-updated
-RUN apt-get update && apt-get install -y curl make net-tools pip 
+RUN apt-get update && apt-get install -y curl make net-tools pip
 RUN curl -fsSL https://deb.nodesource.com/setup_19.x | bash - && apt-get install -y nodejs
 RUN pip install websockets
 
