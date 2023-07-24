@@ -11,7 +11,7 @@ export default function StatusListItem({label, value, delay}){
 
   return (
     <HStack spacing={4}>
-      <Circle size={8} bg={statusColor[value]} transition="all 0.5s" transitionDelay={`${delay}s`} />
+      <Circle size={8} bg={statusColor[value] || statusColor["bad"]} transition="all 0.5s" transitionDelay={`${delay}s`} />
       <Heading textTransform="uppercase" letterSpacing={8}>{label}</Heading>
     </HStack>
   )
