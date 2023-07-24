@@ -44,6 +44,8 @@ services:
       target: cpe
     ports:
       - "1001:8080"
+    depends_on:
+      - dashboard
 
   msn-api:
     image: tv-msn-api-server
@@ -54,6 +56,8 @@ services:
       - "8889:8889"
     environment:
       - VITE_DATA_SERVERS=http://msn-data-1:8012 http://msn-data-2:8012 http://msn-data-3:8012 http://msn-data-4:8012 http://msn-data-5:8012 http://msn-data-6:8012
+    depends_on:
+      - dashboard
 
   msn-data-1:
     image: tv-msn-data-server
@@ -63,6 +67,8 @@ services:
     ports:
       - "1011:8012"
     command: make start p=8012 t=bcd
+    depends_on:
+      - msn-api
 
   msn-data-2:
     image: tv-msn-data-server
@@ -72,6 +78,8 @@ services:
     ports:
       - "1012:8012"
     command: make start p=8012 t=gccs
+    depends_on:
+      - msn-api
 
   msn-data-3:
     image: tv-msn-data-server
@@ -81,6 +89,8 @@ services:
     ports:
       - "1013:8012"
     command: make start p=8012 t=iamd
+    depends_on:
+      - msn-api
 
   msn-data-4:
     image: tv-msn-data-server
@@ -90,6 +100,8 @@ services:
     ports:
       - "1014:8012"
     command: make start p=8012 t=intel
+    depends_on:
+      - msn-api
 
   msn-data-5:
     image: tv-msn-data-server
@@ -99,6 +111,8 @@ services:
     ports:
       - "1015:8012"
     command: make start p=8012 t=freq
+    depends_on:
+      - msn-api
 
   msn-data-6:
     image: tv-msn-data-server
@@ -108,6 +122,8 @@ services:
     ports:
       - "1016:8012"
     command: make start p=8012 t=wx
+    depends_on:
+      - msn-api
 
   mx-api:
     image: tv-mx-api-server
@@ -118,6 +134,8 @@ services:
       - "8888:8888"
     environment:
       - VITE_DATA_SERVERS=http://mx-data-1:8008 http://mx-data-2:8008 http://mx-data-3:8008 http://mx-data-4:8008
+    depends_on:
+      - dashboard
 
   mx-data-1:
     image: tv-mx-data-server
@@ -127,6 +145,8 @@ services:
     ports:
       - "1021:8008"
     command: make start p=8008 t=tv-01
+    depends_on:
+      - mx-api
 
   mx-data-2:
     image: tv-mx-data-server
@@ -136,6 +156,8 @@ services:
     ports:
       - "1022:8008"
     command: make start p=8008 t=tv-02
+    depends_on:
+      - mx-api
 
   mx-data-3:
     image: tv-mx-data-server
@@ -145,6 +167,8 @@ services:
     ports:
       - "1023:8008"
     command: make start p=8008 t=tv-05
+    depends_on:
+      - mx-api
 
   mx-data-4:
     image: tv-mx-data-server
@@ -154,4 +178,6 @@ services:
     ports:
       - "1024:8008"
     command: make start p=8008 t=tv-06
+    depends_on:
+      - mx-api
 
